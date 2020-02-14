@@ -10,6 +10,24 @@ locals {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "burst_balance_too_low" {
+  alarm_name          = "${var.db_instance_id} burst balance too low"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "BurstBalance"
+  namespace           = "AWS/RDS"
+  period              = "600"
+  statistic           = "Average"
+  threshold           = local.thresholds["BurstBalanceThreshold"]
+  alarm_description   = "Average database storage burst balance over last 10 minutes too low, expect a significant performance drop soon"
+  alarm_actions       = [var.sns_topic_arn]
+  ok_actions          = [var.sns_topic_arn]
+
+  dimensions = {
+    DBInstanceIdentifier = var.db_instance_id
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "cpu_utilization_too_high" {
   alarm_name          = "${var.db_instance_id} cpu utilization too high"
   comparison_operator = "GreaterThanThreshold"
