@@ -14,6 +14,12 @@ variable "burst_balance_threshold" {
   default     = 20
 }
 
+variable "monitor_burst_balance" {
+  description = "Allows disabling the monitoring of the General Purpose SSD (gp2) burst-bucket I/O credits. Recommended when not using the General Purpose SSD (gp2) storage type."
+  type        = bool
+  default     = true
+}
+
 variable "cpu_utilization_threshold" {
   description = "The maximum percentage of CPU utilization."
   type        = string
